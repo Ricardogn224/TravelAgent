@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Résultat de la Recherche</title>
+</head>
+<body>
+    <div>
+    <h1>Résultat de la Recherche</h1>
+    <p>{{ result }}</p>
+    <p>Liste des pays :</p>
+    <ul>
+        {% for country in list %}
+            <li><a href="{{ url_for('country_detail', country_name=country['name']) }}">{{ country['name'] }}</a></li>
+        {% endfor %}
+    </ul>
+    </div>
+
+</body>
+</html>
