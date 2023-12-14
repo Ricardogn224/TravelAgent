@@ -2,18 +2,18 @@
 <html>
 <head>
     <title>Résultat de la Recherche</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div>
-    <h1>Résultat de la Recherche</h1>
-    <p>{{ result }}</p>
-    <p>Liste des pays :</p>
-    <ul>
-        {% for country in list %}
-            <li><a href="{{ url_for('country_detail', country_name=country['name']) }}">{{ country['name'] }}</a></li>
-        {% endfor %}
-    </ul>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-6">Résultat de la Recherche</h1>
+        <p>{{ result }}</p>
+        <p class="mt-4">Liste des pays :</p>
+        <ul class="list-disc ml-6">
+            {% for country in list %}
+                <li><a href="{{ url_for('country_detail', country_name=country['name']) }}" class="text-indigo-600 hover:underline">{{ country['name'] }}</a></li>
+            {% endfor %}
+        </ul>
     </div>
-
 </body>
 </html>

@@ -3,155 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
+    <title>Chatbot de Voyage</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding: 0;
+        /* Ajout de styles spécifiques */
+        .chatbot-container {
+            max-width: 28rem;
+            margin: 3rem auto;
+            padding: 1.5rem;
+            background-color: #FFFFFF;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
         }
-        .chat-bottom {
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            margin: 20px;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .chat-input {
-            width: 70%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        #chat-submit {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        #chat-submit:hover {
-            background-color: #0056b3;
-        }
-        #chat-container {
-            margin-top: 20px;
-        }
-        #chat-messages {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .agent-message {
-            background-color: #007bff;
-            color: #fff;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 5px;
+        .user-message, .agent-message {
+            max-width: 70%;
+            word-wrap: break-word;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
         }
         .user-message {
-            background-color: #f7f7f7;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 5px;
+            background-color: #F3F4F6;
+            align-self: flex-start;
         }
-        #chat-input-container {
-            margin-top: 10px;
-        }
-        #user-input {
-            width: 70%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        #send-button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        #send-button:hover {
-            background-color: #0056b3;
-        }
-        .chatbot-loader {
-            display: none;
-            text-align: center;
-        }
-        .chatbot-loader img {
-            width: 50px;
-            height: 50px;
+        .agent-message {
+            background-color: #6366F1;
+            color: #FFFFFF;
+            align-self: flex-end;
         }
     </style>
 </head>
-<body>
-    <div class="chat-bottom">
-        <form id="chat-form" method="POST" action="/">
-            <div>
-                <input class="chat-input" id="chat-input" name="question" type="text" placeholder="Envie de voyage ?">
-            </div>
-            <div>
-                <input id="chat-submit" type="submit" value="Envoyer">
-            </div>
+<body class="bg-gray-100">
+    <div class="chatbot-container">
+        <h2 class="text-lg font-semibold">Recherche de Pays</h2>
+        <p> Décrivez votre voyage de rêve et nous vous proposerons une liste de pays correspondant à votre recherche. Nous vous offrons des suggestions d'activités, réservons vos billets d'avion, et nous occupons de tout !</p>
+        <form id="chat-form" method="POST" action="/" class="mb-4 flex">
+            <input class="w-3/4 py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-indigo-600" id="chat-input" name="question" type="text" placeholder="Où voulez-vous voyager ?">
+            <button id="chat-submit" type="submit" class="w-1/4 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-r-md focus:outline-none hover:bg-indigo-700">Envoyer</button>
         </form>
         
         {% if result %}
-        <div>
-            <h1>Résultat de la Recherche</h1>
+        <div class="mb-4">
+            <h1 class="text-lg font-semibold mb-2">Résultats de la Recherche</h1>
             <p>{{ result }}</p>
-            <p>Liste des pays :</p>
-            <ul>
+            <p class="mt-2">Liste des pays :</p>
+            <ul class="list-disc ml-6">
                 {% for country in list %}
-                    <li><a href="{{ url_for('country_detail', country_name=country['name']) }}">{{ country['name'] }}</a></li>
+                    <li><a href="{{ url_for('country_detail', country_name=country['name']) }}" class="text-indigo-600 hover:underline">{{ country['name'] }}</a></li>
                 {% endfor %}
             </ul>
         </div>
         {% endif %}
     </div>
 
-    <!--chatbot-->
-    <div id="chat-container">
-        <div id="chat-messages">
-            <div class="agent-message">Bonjour, je suis Edouard CERRA, votre agent de voyage virtuel. Posez-moi des questions sur les destinations de votre choix.</div>
+    <div class="chatbot-container">
+        <h2 class="text-center">Parler à un Assistant de Voyage</h2>
+        <div id="chat-messages" class="border border-gray-300 rounded-md p-4 max-h-64 overflow-y-auto"></div>
+        <div id="chat-input-container" class="flex mt-4">
+            <input id="user-input" type="text" placeholder="Posez votre question..." class="w-3/4 py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-indigo-600">
+            <button id="send-button" class="w-1/4 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-r-md focus:outline-none hover:bg-indigo-700">Envoyer</button>
         </div>
-        <div id="chat-input-container">
-            <input id="user-input" type="text" placeholder="Saisissez votre question...">
-            <button id="send-button">Envoyer</button>
-        </div>
-        <div class="chatbot-loader" id="chatbot-loader">
-            <img src="loader.gif" alt="Loading...">
+        <div class="chatbot-loader text-center mt-4" id="chatbot-loader" style="display: none;">
+            <img src="loader.gif" alt="Chargement...">
         </div>
     </div>
-</body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#send-button').click(function() {
-            var userMessage = $('#user-input').val();
-            $('#user-input').val('');
 
-            // Ajoutez le message de l'utilisateur dans la zone de chat
-            $('#chat-messages').append('<div class="user-message">' + userMessage + '</div>');
-
-            // Affichez le loader
-            $('#chatbot-loader').show();
-
-            // Effectuez une requête Ajax au serveur pour obtenir la réponse du chatbot
-            $.post('/ask', { question: userMessage }, function(data) {
-                var botResponse = data.result;
-                // Ajoutez la réponse du chatbot dans la zone de chat
-                $('#chat-messages').append('<div class="agent-message">' + botResponse + '</div>');
-                // Masquez le loader
-                $('#chatbot-loader').hide();
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#send-button').click(function() {
+                var userMessage = $('#user-input').val();
+                $('#user-input').val('');
+                
+                $('#chat-messages').append('<div class="user-message bg-gray-200 rounded-md p-2 my-1">' + userMessage + '</div>');
+                $('#chatbot-loader').show();
+                
+                $.post('/ask', { question: userMessage }, function(data) {
+                    var botResponse = data.result;
+                    $('#chat-messages').append('<div class="agent-message bg-indigo-600 text-white rounded-md p-2 my-1">' + botResponse + '</div>');
+                    $('#chatbot-loader').hide();
+                });
             });
         });
-    });
-</script>
+    </script>
+</body>
 </html>

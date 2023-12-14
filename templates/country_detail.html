@@ -2,10 +2,15 @@
 <html>
 <head>
     <title>Détails du Pays</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    
-    <p>Détails du Pays : {{ country_name }}</p>
-    
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-6">Détails du Pays : {{ country_name }}</h1>
+        
+        <!-- Ajoutez ici les détails spécifiques au pays si nécessaire -->
+        
+        <a href="/" class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out">Retour à la liste des pays</a>
+    </div>
 </body>
 </html>
